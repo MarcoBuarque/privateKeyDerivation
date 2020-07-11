@@ -4,6 +4,7 @@ const BINARY_BASE = 2
 const DECIMAL_BASE = 10
 const HEXA_BASE = 16
 const GROUP_OF_BITS = 4
+const EXPONENTS = [3, 2, 1, 0] // 2³ 2² 2¹ 2⁰
 
 // Formatação:
 
@@ -17,10 +18,10 @@ const parseHexNum = hexNum => {
 
 const normalizeBinary = binaryNum => {
   const length = binaryNum.length
-  const rest = length % 4 
+  const rest = length % GROUP_OF_BITS 
 
   if (rest !== 0){
-    return binaryNum.padStart(length + 4 - rest, '0')
+    return binaryNum.padStart(length + GROUP_OF_BITS - rest, '0')
   }
   return binaryNum
 }
@@ -55,14 +56,14 @@ const convertHexToBinary = hexNum => {
   for (let stringIndex = 0; stringIndex < length; stringIndex++) {
     let decimalNum = parseInt(parsedNum[stringIndex], HEXA_BASE)
 
-    for(let x = 3; x >=  0; x--) {
-      if (decimalNum - BINARY_BASE ** x >= 0) {
+    EXPONENTS.forEach(exponent => {
+      if (decimalNum - BINARY_BASE ** exponent >= 0) {
         result += '1'
-        decimalNum = decimalNum - BINARY_BASE ** x
+        decimalNum = decimalNum - BINARY_BASE ** exponent
       } else {
         result += '0'
       }
-    }
+    })
   }
   return {
     number: result,
@@ -91,12 +92,12 @@ const convertBinaryToHex = binaryNum => {
     const bitGroup = strNum.slice(bit, bit + GROUP_OF_BITS)
     let sum = 0
 
-    for(let exponent = 3; exponent >= 0; exponent--) {
+    EXPONENTS.forEach(exponent => {
       sum += Number(bitGroup[3 - exponent] * (BINARY_BASE ** exponent))
-    }
+    })
   
     result += aux.toString(HEXA_BASE)
-    bit += 4
+    bit += GROUP_OF_BITS
   }
 
   return {
