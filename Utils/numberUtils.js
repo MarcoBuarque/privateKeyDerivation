@@ -8,7 +8,7 @@ const EXPONENTS = [3, 2, 1, 0] // 2³ 2² 2¹ 2⁰
 
 // Formatação:
 
-const parseHexNum = hexNum => {
+export const parseHexNum = hexNum => {
   return String(hexNum).trim().replace(/^0x/i, '')
 }
 
@@ -16,12 +16,13 @@ const parseHexNum = hexNum => {
 
 // Normalização:
 
-const normalizeBinary = binaryNum => {
+export const normalizeBinary = binaryNum => {
   const length = binaryNum.length
   const rest = length % GROUP_OF_BITS 
 
   if (rest !== 0){
-    return binaryNum.padStart(length + GROUP_OF_BITS - rest, '0')
+    const bitsToAdd = GROUP_OF_BITS - rest
+    return binaryNum.padStart(length + bitsToAdd, '0')
   }
   return binaryNum
 }
@@ -30,13 +31,13 @@ const normalizeBinary = binaryNum => {
 
 // Conversão de base:
 
-const convertHexToDecimal = hexNum => {
+export const convertHexToDecimal = hexNum => {
   const parsedNumber = parseHexNum(hexNum)
 
   return parseInt(parsedNumber, DECIMAL_BASE)
 }
 
-const convertHexToBinary = hexNum => {
+export const convertHexToBinary = hexNum => {
   if (typeof hexNum !== 'string') {
     // throw Error('This function accept only string as an valid argument')
     console.log('This function accept only string as an valid argument')
@@ -73,10 +74,9 @@ const convertHexToBinary = hexNum => {
 
 
 
-const convertBinaryToHex = binaryNum => {
+export const convertBinaryToHex = binaryNum => {
   let strNum = String(binaryNum).trim()
 
-  // Validate if is binary
   if (!isBinary(strNum)) {
     // throw Error('This function accept only string as an valid argument')
     console.log('This function accept only binary as an valid argument')
@@ -93,7 +93,8 @@ const convertBinaryToHex = binaryNum => {
     let sum = 0
 
     EXPONENTS.forEach(exponent => {
-      sum += Number(bitGroup[3 - exponent] * (BINARY_BASE ** exponent))
+      const stringIndex = 3 - exponent
+      sum += Number(bitGroup[stringIndex] * (BINARY_BASE ** exponent))
     })
   
     result += aux.toString(HEXA_BASE)
@@ -104,6 +105,14 @@ const convertBinaryToHex = binaryNum => {
     number: strNum,
     length: strNum.length
   }
+}
+
+export const convertHexToBase58 = hexNum => {
+  // TODO
+}
+
+export const convertBase58ToHex = hexNum => {
+  // TODO
 }
 
 // Conversão de base
