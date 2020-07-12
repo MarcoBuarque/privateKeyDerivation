@@ -1,4 +1,4 @@
-import { isBinary, isHex } from './validation'
+import { isBinary, isHex } from './validation.mjs'
 
 const BINARY_BASE = 2
 const DECIMAL_BASE = 10
@@ -35,6 +35,10 @@ export const convertHexToDecimal = hexNum => {
   const parsedNumber = parseHexNum(hexNum)
 
   return parseInt(parsedNumber, DECIMAL_BASE)
+}
+
+export const convertDecimalToHex = decimalNum => {
+  return decimalNum.toString(HEXA_BASE)
 }
 
 export const convertHexToBinary = hexNum => {
@@ -97,14 +101,30 @@ export const convertBinaryToHex = binaryNum => {
       sum += Number(bitGroup[stringIndex] * (BINARY_BASE ** exponent))
     })
   
-    result += aux.toString(HEXA_BASE)
+    result += convertDecimalToHex(sum)
     bit += GROUP_OF_BITS
   }
 
-  return {
-    number: strNum,
-    length: strNum.length
+  // return {
+  //   number: result,
+  //   length: result.length
+  // }
+  return result
+}
+
+export const convertBinaryToBase58 = binaryNum => {
+  let strNum = String(binaryNum).trim()
+
+  if (!isBinary(strNum)) {
+    // throw Error('This function accept only string as an valid argument')
+    console.log('This function accept only binary as an valid argument')
+    return 'Not today'
   }
+  return 'TODO'
+}
+
+export const convertBase58ToBinary = num => {
+  return 'TODO'
 }
 
 export const convertHexToBase58 = hexNum => {
