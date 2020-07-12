@@ -9,7 +9,7 @@ const EXPONENTS = [3, 2, 1, 0] // 2³ 2² 2¹ 2⁰
 // Formatação:
 
 export const parseHexNum = hexNum => {
-  return String(hexNum).trim().replace(/^0x/i, '')
+  return hexNum.trim().replace(/^0x/i, '')
 }
 
 // Formatação
@@ -24,6 +24,7 @@ export const normalizeBinary = binaryNum => {
     const bitsToAdd = GROUP_OF_BITS - rest
     return binaryNum.padStart(length + bitsToAdd, '0')
   }
+
   return binaryNum
 }
 
@@ -32,12 +33,24 @@ export const normalizeBinary = binaryNum => {
 // Conversão de base:
 
 export const convertHexToDecimal = hexNum => {
+  if (typeof hexNum !== 'string') {
+    // throw Error('This function accept only string as an valid argument')
+    console.log('This function accept only string as an valid argument')
+    return 'Not today'
+  }
+
   const parsedNumber = parseHexNum(hexNum)
 
-  return parseInt(parsedNumber, DECIMAL_BASE)
+  if (!isHex(parsedNumber)) {
+    // throw Error('This arg is not a valid hexadecimal')
+    console.log('This arg is not a valid hexadecimal')
+    return 'Not today'
+  }
+
+  return String(parseInt(parsedNumber, HEXA_BASE))
 }
 
-export const convertDecimalToHex = decimalNum => {
+export const convertDecimalToHex = decimalNum => { // TODO TESTS
   return decimalNum.toString(HEXA_BASE)
 }
 
@@ -48,18 +61,19 @@ export const convertHexToBinary = hexNum => {
     return 'Not today'
   }
 
-  if (!isHex(hexNum)) {
+  const parsedNumber = parseHexNum(hexNum)
+
+  if (!isHex(parsedNumber)) {
     // throw Error('This arg is not a valid hexadecimal')
     console.log('This arg is not a valid hexadecimal')
     return 'Not today'
   }
 
-  const parsedNum = parseHexNum(hexNum)
-  const length = parsedNum.length
+  const length = parsedNumber.length
   let result = ''
 
   for (let stringIndex = 0; stringIndex < length; stringIndex++) {
-    let decimalNum = parseInt(parsedNum[stringIndex], HEXA_BASE)
+    let decimalNum = parseInt(parsedNumber[stringIndex], HEXA_BASE)
 
     EXPONENTS.forEach(exponent => {
       if (decimalNum - BINARY_BASE ** exponent >= 0) {
@@ -70,12 +84,16 @@ export const convertHexToBinary = hexNum => {
       }
     })
   }
+
   return {
     number: result,
     length: result.length
   }
-}
 
+  // while (result[0] === '0') {
+  //   result = result.substr(1)
+  // }
+}
 
 
 export const convertBinaryToHex = binaryNum => {
@@ -105,14 +123,13 @@ export const convertBinaryToHex = binaryNum => {
     bit += GROUP_OF_BITS
   }
 
-  // return {
-  //   number: result,
-  //   length: result.length
-  // }
-  return result
+  return {
+    number: result,
+    length: result.length
+  }
 }
 
-export const convertBinaryToBase58 = binaryNum => {
+export const convertBinaryToBase58 = binaryNum => { // TODO TESTS
   let strNum = String(binaryNum).trim()
 
   if (!isBinary(strNum)) {
@@ -123,15 +140,15 @@ export const convertBinaryToBase58 = binaryNum => {
   return 'TODO'
 }
 
-export const convertBase58ToBinary = num => {
+export const convertBase58ToBinary = num => { // TODO TESTS
   return 'TODO'
 }
 
-export const convertHexToBase58 = hexNum => {
+export const convertHexToBase58 = hexNum => { // TODO TESTS
   // TODO
 }
 
-export const convertBase58ToHex = hexNum => {
+export const convertBase58ToHex = hexNum => { // TODO TESTS
   // TODO
 }
 

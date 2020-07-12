@@ -1,9 +1,9 @@
 export const isBinary = binaryNum => {
-  return /^[0-1.]+$/.test(binaryNum)
+  return /^[0-1]+$/.test(binaryNum)
 }
 
 export const isHex = hexNum => {
-  return /^[0-9A-F]+$/.test(hexNum.toLowerCase())
+  return /^[0-9A-Fa-f]+$/.test(hexNum)
 }
 
 export const isBase58 = num => {
